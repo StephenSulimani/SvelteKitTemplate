@@ -8,21 +8,21 @@ COPY . /usr/src/app
 RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Install dependencies
 
-# Install NodeJS
-ENV NODE_VERSION=23.4.0
-RUN apt install -y curl
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/refs/heads/master/install.sh | bash
-ENV NVM_DIR=/root/.nvm
-RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
-RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
-ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
-RUN node --version
-RUN npm --version
+# # Install NodeJS
+# ENV NODE_VERSION=23.4.0
+# RUN apt install -y curl
+# RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/refs/heads/master/install.sh | bash
+# ENV NVM_DIR=/root/.nvm
+# RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION}
+# RUN . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION}
+# RUN . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION}
+# ENV PATH="/root/.nvm/versions/node/v${NODE_VERSION}/bin/:${PATH}"
+# RUN node --version
+# RUN npm --version
 
 RUN bun install
 
-RUN bunx prisma generate
+RUN bunx prisma generate --schema=src/prisma/schema.prisma
 
 # Build the project
 RUN bun --bun run build
