@@ -1,5 +1,5 @@
 # Build stage
-FROM oven/bun:1 AS sk-build
+FROM oven/bun:1.2 AS sk-build
 WORKDIR /usr/src/app
 
 ARG TZ=America/New_York
@@ -17,7 +17,7 @@ RUN bun install
 RUN bun --bun run build
 
 # Final stage
-FROM oven/bun:1
+FROM oven/bun:1.2
 WORKDIR /usr/src/app
 
 ARG TZ=America/New_York
