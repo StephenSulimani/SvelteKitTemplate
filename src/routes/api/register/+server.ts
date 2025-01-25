@@ -29,6 +29,16 @@ function isRegisterRequest(data: unknown): data is RegisterRequest {
 	);
 }
 
+export async function GET(): Promise<Response> {
+	const resp: RegisterResponse = {
+		error: 0,
+		message: 'Method Not Allowed',
+		success: 0
+	};
+
+	return json(resp, { status: 405 });
+}
+
 export async function POST(event: RequestEvent): Promise<Response> {
 	const { request } = event;
 	const data = await request.json();
