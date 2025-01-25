@@ -41,7 +41,6 @@ RUN chmod +x start.sh
 # Expose the application port
 EXPOSE 3000
 
-
 # Start the Bun web server (this will not run in the background, it will block as expected)
 # CMD ["bun", "/usr/src/app/build/index.js"]
 CMD ["./start.sh"]

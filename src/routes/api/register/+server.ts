@@ -1,8 +1,9 @@
 import { isPrismaError, prisma } from '$lib/db';
-import { createJWT, type AuthPayload } from '$lib/jwt';
+// import { createJWT, type AuthPayload } from '$lib/jwt';
 import { json } from '@sveltejs/kit';
 import bcrypt from 'bcryptjs';
 import type { RequestEvent } from './$types';
+import { createJWT, type AuthPayload } from '$lib/jwt';
 
 interface RegisterRequest {
 	email: string;
@@ -28,7 +29,7 @@ function isRegisterRequest(data: unknown): data is RegisterRequest {
 	);
 }
 
-export async function POST(event: RequestEvent) {
+export async function POST(event: RequestEvent): Promise<Response> {
 	const { request } = event;
 	const data = await request.json();
 
@@ -64,14 +65,14 @@ export async function POST(event: RequestEvent) {
 			email: user.email
 		};
 
-		const jwt = await createJWT(payload);
+		await createJWT(payload);
 
-		const tokenCookie = `authToken=${jwt}; HttpOnly; Path=/; Max-Age=86400;`; // Add Secure
+		// const tokenCookie = `authToken=${jwt}; HttpOnly; Path=/; Max-Age=86400;`; // Add Secure
 
 		const response = json(resp, {
 			status: 200,
 			headers: {
-				'Set-Cookie': tokenCookie
+				// 'Set-Cookie': tokenCookie
 			}
 		});
 
@@ -87,5 +88,11 @@ export async function POST(event: RequestEvent) {
 				return json(resp, { status: 400 });
 			}
 		}
+		console.log(error);
+		return json({
+			error: 1,
+			message: 'Unknown error',
+			success: 0
+		});
 	}
 }

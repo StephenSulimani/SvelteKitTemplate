@@ -21,7 +21,7 @@ export interface AuthPayload extends jose.JWTPayload {
 // }
 
 export async function createJWT(payload: jose.JWTPayload): Promise<string> {
-	const encodedSecret = new TextEncoder().encode(import.meta.env.JWT_SECRET);
+	const encodedSecret = new TextEncoder().encode(process.env.JWT_SECRET);
 
 	const token = await new jose.SignJWT(payload)
 		.setProtectedHeader({ alg: 'HS256' })
