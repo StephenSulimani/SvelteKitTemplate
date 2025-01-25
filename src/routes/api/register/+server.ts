@@ -29,16 +29,6 @@ function isRegisterRequest(data: unknown): data is RegisterRequest {
 	);
 }
 
-export async function GET(): Promise<Response> {
-	const resp: RegisterResponse = {
-		error: 0,
-		message: 'Method Not Allowed',
-		success: 0
-	};
-
-	return json(resp, { status: 405 });
-}
-
 export async function POST(event: RequestEvent): Promise<Response> {
 	const { request } = event;
 	const data = await request.json();
@@ -75,14 +65,18 @@ export async function POST(event: RequestEvent): Promise<Response> {
 			email: user.email
 		};
 
-		await createJWT(payload);
+		const jwt = await createJWT(payload);
 
-		// const tokenCookie = `authToken=${jwt}; HttpOnly; Path=/; Max-Age=86400;`; // Add Secure
+		let tokenCookie = `authToken=${jwt}; HttpOnly; Path=/; Max-Age=86400;`; // Add Secure
+
+		if (process.env.NODE_ENV === 'production') {
+			tokenCookie += ' Secure';
+		}
 
 		const response = json(resp, {
 			status: 200,
 			headers: {
-				// 'Set-Cookie': tokenCookie
+				'Set-Cookie': tokenCookie
 			}
 		});
 
