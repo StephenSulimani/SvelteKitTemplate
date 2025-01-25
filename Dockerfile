@@ -13,8 +13,6 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Install dependencies
 RUN bun install
 
-RUN bunx prisma generate
-
 # Build the project
 RUN bun --bun run build
 
@@ -35,10 +33,13 @@ COPY --from=sk-build /usr/src/app/package.json /usr/src/app/package.json
 COPY --from=sk-build /usr/src/app/build /usr/src/app/build
 # COPY --from=sk-build /usr/src/app/node_modules/.prisma /usr/src/app/build/node_modules/.prisma
 
+RUN bunx prisma generate
+
 RUN chmod +x start.sh
 
 # Expose the application port
 EXPOSE 3000
+
 
 # Start the Bun web server (this will not run in the background, it will block as expected)
 # CMD ["bun", "/usr/src/app/build/index.js"]
