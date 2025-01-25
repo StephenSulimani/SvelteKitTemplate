@@ -22,6 +22,11 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 COPY --from=sk-build /usr/src/app/package.json /usr/src/app/package.json
 COPY --from=sk-build /usr/src/app/build /usr/src/app/build
 # Expose the application port
+RUN chmod +x start.sh
+
+# Expose the application port
 EXPOSE 3000
+
 # Start the Bun web server (this will not run in the background, it will block as expected)
-CMD ["bun", "/usr/src/app/build/index.js"]
+# CMD ["bun", "/usr/src/app/build/index.js"]
+CMD ["./start.sh"]
