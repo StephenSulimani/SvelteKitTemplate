@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated';
+import { PrismaClient } from '@prisma-app/client';
 
 interface PrismaErrorMeta {
 	modelName: string;
