@@ -13,8 +13,6 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Install dependencies
 RUN bun install
 
-RUN bunx prisma migrate deploy
-
 # Build the project
 RUN bun --bun run build
 
@@ -38,4 +36,5 @@ COPY --from=sk-build /usr/src/app/build /usr/src/app/build
 EXPOSE 3000
 
 # Start the Bun web server (this will not run in the background, it will block as expected)
-CMD ["bun", "/usr/src/app/build/index.js"]
+# CMD ["bun", "/usr/src/app/build/index.js"]
+CMD ["./start.sh"]
