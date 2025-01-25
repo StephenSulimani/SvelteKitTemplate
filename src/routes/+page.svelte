@@ -1,2 +1,5 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<svelte:head>
+	<title>SvelteKit Template</title>
+</svelte:head>
+<h1>It works!</h1>
+<p>SvelteKit Template by <a href="https://github.com/StephenSulimani">Stephen Sulimani</a></p>
