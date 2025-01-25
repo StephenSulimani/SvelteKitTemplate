@@ -33,6 +33,9 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Copy built files from the build stage
 COPY --from=sk-build /usr/src/app/package.json /usr/src/app/package.json
 COPY --from=sk-build /usr/src/app/build /usr/src/app/build
+COPY --from=sk-build /usr/src/app/node_modules/.prisma /usr/src/app/build/node_modules/.prisma
+
+RUN chmod +x start.sh
 
 # Expose the application port
 EXPOSE 3000
