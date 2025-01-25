@@ -1,3 +1,3 @@
 #!/bin/sh
-bunx prisma generate deploy
+bunx prisma migrate dev
 bun /usr/src/app/build/index.js
