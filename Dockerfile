@@ -13,6 +13,8 @@ RUN cp /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # Install dependencies
 RUN bun install
 
+RUN bunx prisma generate
+
 # Build the project
 RUN bun --bun run build
 
