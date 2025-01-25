@@ -33,7 +33,7 @@ COPY --from=sk-build /usr/src/app/package.json /usr/src/app/package.json
 COPY --from=sk-build /usr/src/app/build /usr/src/app/build
 # COPY --from=sk-build /usr/src/app/node_modules/.prisma /usr/src/app/build/node_modules/.prisma
 
-RUN bunx prisma generate
+# RUN bunx prisma generate
 
 RUN chmod +x start.sh
 
