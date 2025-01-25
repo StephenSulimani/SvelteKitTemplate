@@ -1,5 +1,4 @@
 import * as jose from 'jose';
-import { JWT_SECRET } from '$env/static/private';
 
 export interface AuthPayload extends jose.JWTPayload {
 	id: string;
@@ -22,7 +21,7 @@ export interface AuthPayload extends jose.JWTPayload {
 // }
 
 export async function createJWT(payload: jose.JWTPayload): Promise<string> {
-	const encodedSecret = new TextEncoder().encode(JWT_SECRET);
+	const encodedSecret = new TextEncoder().encode(import.meta.env.JWT_SECRET);
 
 	const token = await new jose.SignJWT(payload)
 		.setProtectedHeader({ alg: 'HS256' })
