@@ -1,5 +1,5 @@
 import { prisma } from '$lib/db';
-import { verifyJWT } from '$lib/jwt';
+import { createJWT, verifyJWT, type AuthPayload } from '$lib/jwt';
 import { json, type RequestEvent } from '@sveltejs/kit';
 
 interface MeResponse {
@@ -22,7 +22,7 @@ export async function GET(event: RequestEvent) {
 		};
 		return json(resp, { status: 400 });
 	}
-	
+
 	const verification = await verifyJWT(authCookie);
 
 	if (!verification) {
@@ -45,7 +45,7 @@ export async function GET(event: RequestEvent) {
 	});
 
 	if (!user) {
-        // User cannot be located in the database
+		// User cannot be located in the database
 		const resp: MeResponse = {
 			error: 1,
 			message: 'AuthToken is invalid!',
@@ -54,14 +54,34 @@ export async function GET(event: RequestEvent) {
 		return json(resp, { status: 400 });
 	}
 
-    const resp: MeResponse = {
-        error: 0,
-        message: {
-            id: user.id,
-            email: user.email,
-        },
-        success: 1
-    }
+	const authPayload: AuthPayload = {
+		id: user.id,
+		email: user.email
+	};
 
-    return json(resp, { status: 200 })
+	const newJWT = await createJWT(authPayload);
+
+	let tokenCookie = `authToken=${newJWT}; HttpOnly; Path=/; Max-Age=86400;`; // Add Secure
+
+	if (process.env.NODE_ENV === 'production') {
+		tokenCookie += ' Secure';
+	}
+
+	const resp: MeResponse = {
+		error: 0,
+		message: {
+			id: user.id,
+			email: user.email
+		},
+		success: 1
+	};
+
+	const response = json(resp, {
+		status: 200,
+		headers: {
+			'Set-Cookie': tokenCookie
+		}
+	});
+
+	return response;
 }
